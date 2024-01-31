@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home Page
+{% endblock %}
+
+{% block homeActive %}
+active
+{% endblock %}
+
+{% block body %}
+<div class="center-text">
+        <img class="mb-4" src="https://cdn-icons-png.flaticon.com/512/8635/8635552.png" width="150" height="150">
+</div>
+<div class="container">
+<form method="POST" class="form-normalLead" style="color:white">
+    <div class="container rounded-5 center-text custom-container">
+
+        <br><br><br>
+        {{ form.hidden_tag() }}
+            <div class="row">
+                    <div class="col-1 offset-3">
+                        {{ form.yahya.label(class="custom-text") }}
+                        <br>
+                        {{ form.yahya(id="yahya", class="form-check-input checkbox-styling", placeholder="User name", style="background-color: #b1d8fb;") }}
+                    </div>
+                    <div class="col-1 ">
+                        {{ form.rania.label(class="custom-text") }}
+                        <br>
+                        {{ form.rania(id="rania", class="form-check-input checkbox-styling", placeholder="User name", style="background-color: #b1d8fb;") }}
+                    </div>
+                    <div class="col-3 offset-1">
+                        {{form.sheet.label(class="display-6", style="font-weight : 475") }}
+                    </div>
+
+            </div>
+            <div class="row">
+                    <div class="col-1 offset-3">
+                        <br>
+                        {{ form.youssef.label(class="custom-text") }}
+                        <br>
+                        {{ form.youssef(id="youssef", class="form-check-input checkbox-styling", placeholder="User name", style="background-color: #b1d8fb;") }}
+                    </div>
+                    <br>
+                    <div class="col-1 ">
+                        <br>
+                        {{ form.empty.label(class="custom-text") }}
+                        <br>
+                        {{ form.empty(id="empty", class="form-check-input checkbox-styling ", placeholder="User name", style="background-color: #b1d8fb;") }}
+                    </div>
+                    <div class="col-3 offset-1 ">
+                        <br>
+                        {{ form.sheet(id="sheets", class="form-select",size="3", style="width: 300px;background-color: #9bcefa;") }}
+                    </div>
+            </div>
+    </div>
+    <div class="container">
+        <br>
+<!--        {{ form.run(class="btn btn-lg btn-block btn-dark form-control", style="background-color: #1D267D", onclick="showMessage()") }}-->
+        <button class="btn btn-lg btn-block btn-dark form-control" style="background-color: #1D267D" onclick="createAlert('Running', 'primary')">Run</button>
+
+    </div>
+</form>
+
+</div>
+
+<div class="container center-text">
+    <br>
+</div>
+{% endblock %}

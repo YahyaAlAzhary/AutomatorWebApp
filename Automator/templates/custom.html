@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Custom Lead
+{% endblock %}
+
+{% block customActive %}
+active
+{% endblock %}
+
+{% block body %}
+<div class="center-text">
+        <img class="mb-4" src="https://cdn-icons-png.flaticon.com/512/8635/8635552.png" width="150" height="150">
+</div>
+<div class="container">
+    <form method="POST" class="form-customLead" style="color:white">
+        <div class="container rounded-5 center-text custom-container">
+            <br><br><br>
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col-2 offset-1">
+                    {{ form.row.label(class="custom-text") }}
+                </div>
+                <div class="col-2 offset-1">
+                    {{ form.sheet.label(class="custom-text") }}
+                </div>
+                <div class="col-2 offset-1">
+                    {{ form.fields.label(class="custom-text") }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-2 offset-1">
+                    {{ form.row(class="form-control") }}
+                </div>
+                <div class="col-2 offset-1">
+                    {{ form.sheet(class="btn btn-secondary btn-light dropdown-toggle") }}
+                </div>
+                <div class="col-2 offset-1">
+                    {{ form.fieldUpdate(class="btn btn-secondary btn-light dropdown-toggle") }}
+                </div>
+                <div class="col-2 ">
+                    {{ form.submitField(class="btn btn-lg btn-block btn-dark form-control") }}
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-2 offset-7">
+                    <br>
+                    {{ form.fields(class="form-select", size="5", style="width:200px") }}
+                </div>
+            </div>
+
+        </div>
+        <br>
+        {{ form.run(class="btn btn-lg btn-block btn-dark form-control", style="background-color: #1D267D") }}
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login Page
+{% endblock %}
+
+{% block loginActive %}
+active
+{% endblock %}
+
+{% block body %}
+<div class="center-text">
+        <img class="mb-4" src="https://cdn-icons-png.flaticon.com/512/8635/8635552.png" width="150" height="150">
+</div>
+
+<div class="container">
+    <form method="POST" class="form-normalLead" style="color:white">
+        <div class="container rounded-5 center-text custom-container">
+            <br><br><br>
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col-10 offset-1">
+                    {{form.username.label(class="display-6", style="color:#9bcefa;font-weight : 500;")}}
+                    {{form.username(class="form-control", placeholder="Username")}}
+                    <br>
+                    {{form.password.label(class="display-6", style="color:#9bcefa;font-weight : 500;")}}
+                    {{form.password(class="form-control", placeholder="Password")}}
+                </div>
+            </div>
+        </div>
+        <br>
+        {{form.submit(class="btn btn-lg btn-block btn-dark form-control", style="background-color: #1D267D")}}
+    </form>
+</div>
+{% endblock %}
