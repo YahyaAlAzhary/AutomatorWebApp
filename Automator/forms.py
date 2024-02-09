@@ -15,7 +15,7 @@ class NormalForm(FlaskForm):
     rania = BooleanField(label="RE")
     youssef = BooleanField(label="YA")
     empty = BooleanField(label="Empty")
-    sheet = SelectField(label="Choose a Sheet", validators=[DataRequired()],
+    sheet = SelectField(label="Select a Sheet", validators=[DataRequired()],
                         choices=[("Dani", "Dani"), ("HS", "HS"), ("Mohammad", "Mohammad"), ("OS", "OS"),
                                  ("Pankaj", "Pankaj")])
     run = SubmitField(label="Run")
@@ -62,5 +62,14 @@ class LoginForm(FlaskForm):
     submit = SubmitField(label="Login")
 
 
+class RegisterForm(FlaskForm):
+    def validate_username(self, username_to_check):
+        foundUser = User.query.filter_by(username=username_to_check.data).first()
+        if foundUser:
+            raise ValidationError("Username already exists, please try a different one")
 
-
+    username = StringField(label="Username", validators=[DataRequired(), Length(min=2, max=30)])
+    password = PasswordField(label="Password", validators=[DataRequired(), Length(min=6)])
+    passwordConfirm = PasswordField(label="Confirm Password",
+                                    validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
+    submit = SubmitField(label="Register")

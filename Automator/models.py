@@ -13,6 +13,9 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(length=30), nullable=False, unique=True)
     password_hash = db.Column(db.String(), nullable=False)
+    is_admin = db.Column(db.Boolean())
+    userCode = db.Column(db.String(), unique=True)
+    confirmation = db.Column(db.String())
 
     @property
     def password(self):
@@ -29,8 +32,10 @@ class User(db.Model, UserMixin):
 with app.app_context():
     # db.drop_all()
     # db.create_all()
-    # user1 = User(username="yy", password_hash=bcrypt.generate_password_hash("").decode('utf-8'))
+    # user1 = User(username="3amak", password_hash=bcrypt.generate_password_hash("21021157DJISy*").decode('utf-8'), is_admin=True, userCode="yy")
     # db.session.add(user1)
+    # db.session.commit()
+    # User.query.filter_by(id=2).delete()
     # db.session.commit()
     # user = User.query.filter_by(username="yy").first()
     # print(user.check_password_correction(attempted_password=""))

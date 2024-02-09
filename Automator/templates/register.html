@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Login Page
+Register Page
 {% endblock %}
 
-{% block loginActive %}
+{% block registerActive %}
 active
 {% endblock %}
 
@@ -12,7 +12,7 @@ active
 <div class="container">
     <form method="POST" class="form-normalLead" style="color:white">
         <div class="container rounded-5 center-text custom-container">
-            <br><br><br>
+            <br><br>
             {{ form.hidden_tag() }}
             <div class="row">
                 <div class="col-10 offset-1">
@@ -21,6 +21,9 @@ active
                     <br>
                     {{form.password.label(class="display-6", style="color:#9bcefa;font-weight : 500;")}}
                     {{form.password(class="form-control", placeholder="Password")}}
+                    <br>
+                    {{form.passwordConfirm.label(class="display-6", style="color:#9bcefa;font-weight : 500;")}}
+                    {{form.passwordConfirm(class="form-control", placeholder="Confirm Password")}}
                 </div>
             </div>
         </div>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Requests
+{% endblock %}
+
+{% block requestsActive %}
+active
+{% endblock %}
+
+{% block body %}
+
+
+<div class="list-group container">
+  {% for user in users.query.filter_by(confirmation='pending') %}
+      <button class="list-group-item list-group-item-action list-group-item-primary" type="button" data-bs-toggle="collapse" data-bs-target="#user{{loop.index}}" aria-expanded="false" aria-controls="user{{loop.index}}">
+        {{user.username}}
+      </button>
+      <div class="collapse" id="user{{loop.index}}">
+          <br>
+        <div class="row">
+          <div class="col offset-1">
+              <input class="form-check-input" type="checkbox" id="reject{{loop.index}}">
+              <label class="form-check-label" for="reject{{loop.index}}">Reject user</label>
+          </div>
+          <div class="col form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switch{{loop.index}}">
+             <label class="form-check-label" for="switch{{loop.index}}">Admin?</label>
+          </div>
+          <div class="col ">
+              <input class="form-control form-control-sm" id="text{{loop.index}}" placeholder="User Code">
+          </div>
+          <div class="col offset-1">
+            <button class="btn btn-info" onclick="redirectToRequestPage('{{ url_for('request_page', user=user.id)}}', 'switch{{loop.index}}', 'text{{loop.index}}', 'reject{{loop.index}}')">
+                Save
+            </button>
+          </div>
+        </div>
+          <br>
+      </div>
+  {% endfor %}
+</div>
+{% endblock %}

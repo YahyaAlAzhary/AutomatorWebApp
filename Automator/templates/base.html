@@ -7,7 +7,6 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
 
     <title>
         {% block title %}
@@ -80,12 +79,52 @@
 
             // Append the alert container to the body
             document.body.appendChild(alertContainer);}
-
-
         }
-    </script>
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
+        var inactivityTimeout;
+        var inactivityThreshold = 900000; // 5 minutes (in milliseconds)
+
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimeout);
+            inactivityTimeout = setTimeout(logoutUser, inactivityThreshold);
+        }
+
+        function logoutUser() {
+            // Perform the logout action
+            // You may want to send a request to the server to handle the logout
+            console.log("User has been inactive. Logging out...");
+
+            // Redirect to the logout route on the server
+            window.location.href = '/inacitvelogout';
+        }
+
+        // Reset the timer on user interaction
+        document.addEventListener('mousemove', resetInactivityTimer);
+        document.addEventListener('keypress', resetInactivityTimer);
+        document.addEventListener('scroll', resetInactivityTimer);
+        document.addEventListener('click', resetInactivityTimer);
+
+        // Initial setup of the inactivity timer
+        resetInactivityTimer();
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
+        function redirectToRequestPage(url, adminID, userCodeID, rejectID) {
+        var admin = document.getElementById(adminID).checked;
+        var userCode = document.getElementById(userCodeID).value;
+        var reject = document.getElementById(rejectID).checked;
+        var finalurl = url+"&admin="+admin+"&userCode="+userCode+"&reject="+reject;
+        window.location.href = finalurl;
+    }
+</script>
+
   </head>
   <body>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
     <nav class="navbar navbar-expand-md navbar-dark " style="background-color: #4a5560">
       <a class="navbar-brand" href="{{url_for('home_page')}}">&nbsp;&nbsp;Automator</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
@@ -100,22 +139,40 @@
                 <a class="nav-link {% block customActive %} {% endblock %}" href="{{url_for('custom_page')}}">Custom</a>
             </li>
         </ul>
+        {% if current_user.is_authenticated %}
+          <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('logout_page')}}">Logout</a>
+            </li>
+          </ul>
+        {% if current_user.is_admin %}
+          <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link {% block requestsActive %} {% endblock %}" href="{{url_for('request_page')}}">Requests</a>
+            </li>
+          </ul>
+        {% endif %}
+        {% else %}
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link {% block loginActive %} {% endblock %}" href="{{url_for('login_page')}}">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Register</a>
+                <a class="nav-link {% block registerActive %} {% endblock %}" href="{{url_for('register_page')}}">Register</a>
             </li>
         </ul>
+        {% endif %}
+
       </div>
     </nav>
+
 
 
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
+                {% set category = 'danger' if message[0] == "Please sign in first" else category %}
                <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
                   {{message[0]}}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -123,15 +180,15 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
+    <br>
+    <div class="center-text">
+        <img class="mb-4" src="https://cdn-icons-png.flaticon.com/512/8635/8635552.png" width="150" height="150">
+    </div>
 
     {% block body %}
     {% endblock %}
 
     <!-- Optional JavaScript; choose one of the two! -->
-    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
   </body>
 </html>

@@ -1,8 +1,9 @@
-import socket
-import asyncio
-from flask import render_template, redirect, url_for, flash
-from flask_login import login_user
-from Automator.forms import NormalForm, CustomForm, LoginForm
+from datetime import timedelta
+
+from flask import render_template, redirect, url_for, flash, request
+from flask_login import login_user, login_required, current_user, logout_user
+
+from Automator.forms import NormalForm, CustomForm, LoginForm, RegisterForm, RequestForm
 from joint import *
 from Automator import *
 from Automator.models import User
@@ -10,6 +11,7 @@ from Automator.models import User
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/home", methods=['GET', 'POST'])
+@login_required
 def home_page():
     form = NormalForm()
 
@@ -26,8 +28,8 @@ def home_page():
                 flash(["Invalid DOB, try running a custom lead with the corrected patdob"], category="danger")
             elif result[0] == "shoe":
                 flash(["Missing shoe size, try running a custom lead with the corrected patdob"], category="danger")
-            else:
-                flash(["Done"], category="success")
+        else:
+            flash(["Done"], category="success")
         SavedInfo.clear()
         SavedEdits.clear()
 
@@ -42,6 +44,7 @@ def home_page():
 
 
 @app.route("/custom", methods=['GET', 'POST'])
+@login_required
 def custom_page():
     form = CustomForm()
 
@@ -81,15 +84,71 @@ def login_page():
     if form.validate_on_submit():
         attempted_user = User.query.filter_by(username=form.username.data).first()
         if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
-            login_user(attempted_user)
-            flash([f"You are now logged in as {attempted_user.username}"], category="success")
-            return redirect(url_for("home_page"))
+            if attempted_user.confirmation == 'pending':
+                flash(["Please wait for an admin to approve your registration"], category='primary')
+            elif attempted_user.confirmation == 'rejected':
+                flash(["Your account registration was rejected by the Admin"], category='danger')
+            else:
+                login_user(attempted_user, remember=False)
+                flash([f"You are now logged in as {attempted_user.username}"], category="success")
+                return redirect(url_for("home_page"))
         else:
             flash(["User and password do not match! Please try again"], category="danger")
 
     return render_template("login.html", form=form)
 
 
-@app.route("/test", methods=['GET', 'POST'])
-def age_page():
-    return render_template("test.html")
+@app.route("/logout")
+def logout_page():
+    logout_user()
+    return redirect(url_for("login_page"))
+
+
+@app.route("/inacitvelogout")
+def inactivity_logout():
+    if current_user.is_authenticated:
+        logout_user()
+        flash(["Session expired, please Log in again"], category="primary")
+    return redirect(url_for("login_page"))
+
+
+@app.route("/register", methods=['GET', 'POST'])
+def register_page():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        newUser = User(username=form.username.data, password=form.password.data, confirmation="pending")
+        db.session.add(newUser)
+        db.session.commit()
+        flash(["Please wait for an admin to approve your registration"], category="primary")
+        return redirect(url_for("login_page"))
+
+    if form.errors != {} and form.is_submitted():
+        for err_msg in form.errors.values():
+            flash(err_msg, category="danger")
+
+    return render_template("register.html", form=form)
+
+
+@app.route("/requests", methods=['GET', 'POST'])
+@login_required
+def request_page():
+    if request.method == "GET" and request.args.get("admin"):
+        if (not request.args.get("userCode") or request.args.get("userCode").strip() == "") and request.args.get(
+                "reject") == "false":
+            flash(["Please enter a User Code"], category="danger")
+        else:
+            id = request.args.get("user")
+            user = User.query.get(id)
+
+            if request.args.get("reject") == "false":
+                user.confirmation = "accepted"
+                if request.args.get("admin") == "true":
+                    user.is_admin = True
+                else:
+                    user.is_admin = False
+                user.userCode = request.args.get("userCode")
+            else:
+                user.confirmation = "rejected"
+            db.session.commit()
+
+    return render_template("requests.html", users=User)
