@@ -61,6 +61,15 @@ class SavedInfo:
         cls.sheet = sheet
         cls.users = users
 
+
+class JointUpdates:
+    message = "hh"
+
+    @classmethod
+    def set(cls, newMessage):
+        cls.message = newMessage
+
+
 from Automator import routes
 
 

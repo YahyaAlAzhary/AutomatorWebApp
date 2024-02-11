@@ -20,15 +20,21 @@ active
                     {{form.username(class="form-control", placeholder="Username")}}
                     <br>
                     {{form.password.label(class="display-6", style="color:#9bcefa;font-weight : 500;")}}
-                    {{form.password(class="form-control", placeholder="Password")}}
+                    {{form.password(class="form-control", placeholder="Password", id="password")}}
                     <br>
                     {{form.passwordConfirm.label(class="display-6", style="color:#9bcefa;font-weight : 500;")}}
                     {{form.passwordConfirm(class="form-control", placeholder="Confirm Password")}}
+                    <br><br>
+                    <input class="form-check-input" type="checkbox" onclick="togglePassword('password')" id="flexCheckDefault">
+                    <label class="form-check-label custom-text-nopad" for="flexCheckDefault">
+                        Show Password
+                    </label>
                 </div>
             </div>
         </div>
         <br>
         {{form.submit(class="btn btn-lg btn-block btn-dark form-control", style="background-color: #1D267D")}}
+        <div style="margin-bottom: 23px;"></div>
     </form>
 </div>
 {% endblock %}

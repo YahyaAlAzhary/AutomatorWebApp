@@ -5,17 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af3da129-2c8b-48e2-81f8-1027930e5341" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/AutomatorWebApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AutomatorWebApp.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Automator/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Automator/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Automator/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Automator/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/routes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Automator/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Automator/templates/custom.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/custom.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Automator/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Automator/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Automator/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Automator/templates/requests.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/requests.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Automator/templates/users.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/users.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/instance/Automator.db" beforeDir="false" afterPath="$PROJECT_DIR$/instance/Automator.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/joint.py" beforeDir="false" afterPath="$PROJECT_DIR$/joint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +38,9 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2biNQSygLcb0U9MCL1VlkXNDfo4" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />

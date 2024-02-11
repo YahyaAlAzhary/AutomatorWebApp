@@ -7,6 +7,7 @@ import re
 import calendar
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from Automator import JointUpdates
 
 
 class AgeException(Exception):
@@ -125,17 +126,19 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
             if inp == "dani" and (row[3] != "") and (row[1] == ""):
                 leads[rownum] = row
 
-            elif (inp != "dani" and not row[ifs[0]].lower().__contains__("upl") and (row[ifs[1]] != "") and row[ifs[2]] != "done"
+            elif (inp != "dani" and not row[ifs[0]].lower().__contains__("upl") and (row[ifs[1]] != "") and row[
+                ifs[2]] != "done"
                   and row[ifs[3]].strip() in users and not check_empty):
                 leads[rownum] = row
 
-            elif (inp != "dani" and not row[ifs[0]].lower().__contains__("upl") and (row[ifs[1]] != "") and row[ifs[2]] != "done"
+            elif (inp != "dani" and not row[ifs[0]].lower().__contains__("upl") and (row[ifs[1]] != "") and row[
+                ifs[2]] != "done"
                   and check_empty and row[ifs[3]].strip() not in users):
                 leads[rownum] = row
             rownum += 1
 
         if len(leads) == 0:
-            return "done"
+            return ["done"]
     else:
         leads[inputrow] = values[inputrow - 1]
 
@@ -169,6 +172,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
 
         doubleSpacePattern = re.compile("\s\s+")
         patname = doubleSpacePattern.sub(" ", (f"{FirstName} {LastName}".title()))
+        JointUpdates.set(patname)
         print(patname)
 
         # patient's id
@@ -384,7 +388,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
 
         hipPain = randomlevel
 
-        leftKneePattern = re.compile("[^a-zA-Z][Ll][a-zA-Z]*[^a-zA-Z]+[Kk][a-zA-Z]*"+"|"+"[^a-zA-Z]LKB")
+        leftKneePattern = re.compile("[^a-zA-Z][Ll][a-zA-Z]*[^a-zA-Z]+[Kk][a-zA-Z]*" + "|" + "[^a-zA-Z]LKB")
         rightKneePattern = re.compile("[^a-zA-Z][Rr][a-zA-Z]*[^a-zA-Z]+[Kk][a-zA-Z]*")
         bothKneesPattern = re.compile("[^a-zA-Z][Bb][^a][a-zA-Z]*[^a-zA-Z]+[Kk][a-zA-Z]*")
 

@@ -1,10 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}
+Users
+{% endblock %}
+
+{% block usersActive %}
+active
+{% endblock %}
+
+{% block body %}
+
+<div class="list-group container">
+    <h1 class="display-4" style="font-weight : 375;">Edit Current Users</h1>
+    <br>
+  {% for user in users.query.all() %}
+      <button class="list-group-item list-group-item-action list-group-item-primary" type="button" data-bs-toggle="collapse" data-bs-target="#user{{loop.index}}" aria-expanded="false" aria-controls="user{{loop.index}}">
+        {{user.username}}
+      </button>
+      <div class="collapse" id="user{{loop.index}}">
+          <br>
+        <div class="row">
+          {% if user.is_admin %}
+              <div class="col form-check form-switch offset-1">
+                 <input class="form-check-input" type="checkbox" role="switch" id="switch{{loop.index}}" checked>
+                 <label class="form-check-label" for="switch{{loop.index}}">Admin?</label>
+              </div>
+          {% else %}
+              <div class="col form-check form-switch offset-1">
+                 <input class="form-check-input" type="checkbox" role="switch" id="switch{{loop.index}}" >
+                 <label class="form-check-label" for="switch{{loop.index}}">Admin?</label>
+              </div>
+          {% endif %}
+          <div class="col">
+              <input class="form-control form-control-sm" id="text{{loop.index}}" placeholder="User Code">
+          </div>
+          <div class="col offset-1">
+            <button class="btn btn-info" onclick="userRedirect('{{ url_for('users_page', user=user.id)}}', 'switch{{loop.index}}', 'text{{loop.index}}')">
+                Save
+            </button>
+          </div>
+          <div class="col">
+            <button class="btn btn-danger" onclick="deleteUser('{{ url_for('users_page', user=user.id)}}')">
+                Delete User
+            </button>
+          </div>
+        </div>
+          <br>
+      </div>
+  {% endfor %}
+</div>
+{% endblock %}

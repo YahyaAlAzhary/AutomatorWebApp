@@ -1,9 +1,9 @@
 from datetime import timedelta
 
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
 
-from Automator.forms import NormalForm, CustomForm, LoginForm, RegisterForm, RequestForm
+from Automator.forms import NormalForm, CustomForm, LoginForm, RegisterForm
 from joint import *
 from Automator import *
 from Automator.models import User
@@ -23,13 +23,15 @@ def home_page():
         SavedInfo.set(form.sheet.data, selected_choices)
         result = mainjoint(SavedInfo.sheet, SavedInfo.users, "", Authentication.credentials,
                            Authentication.service, Authentication.drive_service, SavedEdits.edits)
-        if result:
-            if result[0] == "age":
-                flash(["Invalid DOB, try running a custom lead with the corrected patdob"], category="danger")
-            elif result[0] == "shoe":
-                flash(["Missing shoe size, try running a custom lead with the corrected patdob"], category="danger")
-        else:
+        print(result)
+        if result[0] == "done" or not result:
             flash(["Done"], category="success")
+        else:
+            if result:
+                if result[0] == "age":
+                    flash(["Invalid DOB, try running a custom lead with the corrected patdob"], category="danger")
+                elif result[0] == "shoe":
+                    flash(["Missing shoe size, try running a custom lead with the corrected shoe size"], category="danger")
         SavedInfo.clear()
         SavedEdits.clear()
 
@@ -146,9 +148,44 @@ def request_page():
                     user.is_admin = True
                 else:
                     user.is_admin = False
-                user.userCode = request.args.get("userCode")
+                userCode = request.args.get("userCode")
+                if User.query.filter_by(userCode=userCode).first():
+                    flash(["User Code already in use, please choose a different one"], category="danger")
+                else:
+                    user.userCode = userCode
             else:
                 user.confirmation = "rejected"
             db.session.commit()
+        return redirect(url_for("request_page"))
 
     return render_template("requests.html", users=User)
+
+
+@app.route("/users", methods=['GET', 'POST'])
+def users_page():
+    if request.method == "GET" and request.args.get("admin"):
+        id = request.args.get("user")
+        user = User.query.get(id)
+        print(id)
+        if request.args.get("admin") == "true":
+            user.is_admin = True
+        else:
+            user.is_admin = False
+
+        if request.args.get("userCode") and request.args.get("userCode").strip() != "":
+            userCode = request.args.get("userCode")
+            if User.query.filter_by(userCode=userCode).first():
+                flash(["User Code already in use, please choose a different one"], category="danger")
+            else:
+                user.userCode = userCode
+        db.session.commit()
+        return redirect(url_for("users_page"))
+
+    elif request.method == "GET" and request.args.get("delete"):
+        id = request.args.get("user")
+        user = User.query.get(id)
+        User.query.filter_by(id=id).delete()
+        db.session.commit()
+        return redirect(url_for("users_page"))
+
+    return render_template("users.html", users=User)

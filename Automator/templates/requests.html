@@ -9,9 +9,9 @@ active
 {% endblock %}
 
 {% block body %}
-
-
 <div class="list-group container">
+    <h1 class="display-4" style="font-weight : 375;">Account Registration Requests</h1>
+    <br>
   {% for user in users.query.filter_by(confirmation='pending') %}
       <button class="list-group-item list-group-item-action list-group-item-primary" type="button" data-bs-toggle="collapse" data-bs-target="#user{{loop.index}}" aria-expanded="false" aria-controls="user{{loop.index}}">
         {{user.username}}
@@ -31,7 +31,7 @@ active
               <input class="form-control form-control-sm" id="text{{loop.index}}" placeholder="User Code">
           </div>
           <div class="col offset-1">
-            <button class="btn btn-info" onclick="redirectToRequestPage('{{ url_for('request_page', user=user.id)}}', 'switch{{loop.index}}', 'text{{loop.index}}', 'reject{{loop.index}}')">
+            <button class="btn btn-info" onclick="requestRedirect('{{ url_for('request_page', user=user.id)}}', 'switch{{loop.index}}', 'text{{loop.index}}', 'reject{{loop.index}}')">
                 Save
             </button>
           </div>
