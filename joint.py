@@ -250,7 +250,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
             year = MonthNumPattern.search(baddob).group(3)
         else:
             print("DOB format is wrong in sheet")
-            return ["age", patname, sheetName]
+            return ["age", patname, sheetName, rownum]
 
         patdob = month + " " + day + " " + year
         nummonth = list(calendar.month_name).index(month.capitalize())
@@ -259,7 +259,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
             patage = age(datetime.date(int(year), nummonth, int(day)))
         except (ValueError, TypeError):
             print("DOB format is wrong in sheet")
-            return ["age", patname, sheetName]
+            return ["age", patname, sheetName, rownum]
 
         # patient's gender
         patgender = edits.get('patgender', x[sh[13]].lower().strip())
@@ -485,7 +485,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                     flag = True
             if not flag:
                 print("Shoe Size not found")
-                return ["shoe", patname, sheetName]
+                return ["shoe", patname, sheetName, rownum]
 
         print(requestedBraces)
 
@@ -700,6 +700,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         sheet = sheet
         cell = cell
         sheet.update(cell, [["done"]])
+    return ["done"]
 
 
 if __name__ == "__mainjoint__":

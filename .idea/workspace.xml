@@ -7,13 +7,11 @@
     <list default="true" id="af3da129-2c8b-48e2-81f8-1027930e5341" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Automator/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Automator/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Automator/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/routes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Automator/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Automator/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Automator/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Automator/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Automator/templates/requests.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/requests.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Automator/templates/users.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/users.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Automator/templates/test.html" beforeDir="false" afterPath="$PROJECT_DIR$/Automator/templates/test.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/instance/Automator.db" beforeDir="false" afterPath="$PROJECT_DIR$/instance/Automator.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/joint.py" beforeDir="false" afterPath="$PROJECT_DIR$/joint.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
@@ -27,6 +25,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -50,10 +49,11 @@
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Python.models.executor&quot;: &quot;Run&quot;,
     &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Yahya Al-Azhary/Documents/Repository/AutomatorWebApp&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Yahya Al-Azhary/Documents/Repository/WorkAutomator&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;MTConfigurable&quot;
   }
 }</component>
@@ -102,9 +102,32 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="AutomatorWebApp" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.run" />
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.models" />
       </list>
     </recent_temporary>
@@ -126,5 +149,16 @@
       <updated>1706693922915</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

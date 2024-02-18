@@ -1,48 +1,47 @@
-from datetime import timedelta
+import time
 
-from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask import render_template, redirect, url_for, flash, request, jsonify, session, Response
 from flask_login import login_user, login_required, current_user, logout_user
+from wtforms import BooleanField
+from flask_socketio import emit, send
+from asyncio import sleep, create_task, run
 
 from Automator.forms import NormalForm, CustomForm, LoginForm, RegisterForm
-from joint import *
 from Automator import *
 from Automator.models import User
+from joint import *
 
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/home", methods=['GET', 'POST'])
 @login_required
 def home_page():
-    form = NormalForm()
-
-    if form.validate_on_submit():
-        selected_choices = []
-        for field in form:
-            if field.type == "BooleanField":
-                selected_choices.append(field.label.text.lower())
-        SavedInfo.set(form.sheet.data, selected_choices)
-        result = mainjoint(SavedInfo.sheet, SavedInfo.users, "", Authentication.credentials,
-                           Authentication.service, Authentication.drive_service, SavedEdits.edits)
-        print(result)
-        if result[0] == "done" or not result:
-            flash(["Done"], category="success")
+    sheet = request.args.get("sheet")
+    users = request.args.get("users")
+    if sheet is not None:
+        if sheet == "":
+            flash(["Please select a sheet"], category="danger")
+            return redirect(url_for('home_page'))
+        elif len(users) == 0:
+            flash(["Please select at least one user"], category="danger")
+            return redirect(url_for('home_page'))
         else:
-            if result:
-                if result[0] == "age":
-                    flash(["Invalid DOB, try running a custom lead with the corrected patdob"], category="danger")
-                elif result[0] == "shoe":
-                    flash(["Missing shoe size, try running a custom lead with the corrected shoe size"], category="danger")
-        SavedInfo.clear()
-        SavedEdits.clear()
+            try:
+                result = mainjoint(sheet, users, "", Authentication.credentials, Authentication.service,
+                          Authentication.drive_service, {})
+            except Exception:
+                flash(["An un expected error occured"], category="danger")
+                return redirect(url_for('home_page'))
 
-    if form.errors != {} and form.is_submitted():
-        for err_msg in form.errors.values():
-            if err_msg.__contains__("CSRF"):
-                render_template('home.html', form=form)
+            if result[0] == "age":
+                flash([f"The DOB format for {result[1]} in {result[2]} row={result[3]} is wrong. Try fixing it in the custom lead tab"], category="danger")
+            elif result[0] == "shoe":
+                flash([f"The Shoe Size for {result[1]} in {result[2]} row={result[3]} is wrong / missing. Try fixing it in the custom lead tab"], category="danger")
             else:
-                flash(err_msg, category="danger")
+                flash(["Done"], category="success")
+            return redirect(url_for('home_page'))
 
-    return render_template('home.html', form=form)
+    return render_template('home.html', User=User)
 
 
 @app.route("/custom", methods=['GET', 'POST'])

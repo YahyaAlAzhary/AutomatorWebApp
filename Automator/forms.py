@@ -1,20 +1,29 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
+from wtforms.fields.choices import RadioField, SelectMultipleField
+from wtforms.fields.core import Field
+from wtforms.fields.form import FormField
+from wtforms.fields.list import FieldList
+from wtforms.form import Form
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, Optional
 from wtforms import BooleanField, SelectField, IntegerField
 from Automator.models import User
+from Automator import app
 
 
-def user_check(form, field):
-    if not (form.yahya.data or form.rania.data or form.youssef.data or form.empty.data):
-        raise ValidationError("Please choose atleast one user")
+class NormalFormHelper(Form):
+    users = BooleanField(label="")
 
 
 class NormalForm(FlaskForm):
-    yahya = BooleanField(label="YY", validators=[user_check])
-    rania = BooleanField(label="RE")
-    youssef = BooleanField(label="YA")
-    empty = BooleanField(label="Empty")
+    with app.app_context():
+        users = User.query.all()
+
+    choices = []
+    for user in users:
+        choices.append((user.userCode, user.userCode))
+
+    x = FieldList(FormField(NormalFormHelper), min_entries=len(users))
     sheet = SelectField(label="Select a Sheet", validators=[DataRequired()],
                         choices=[("Dani", "Dani"), ("HS", "HS"), ("Mohammad", "Mohammad"), ("OS", "OS"),
                                  ("Pankaj", "Pankaj")])

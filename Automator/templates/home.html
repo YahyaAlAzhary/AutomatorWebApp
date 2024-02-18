@@ -9,59 +9,155 @@ active
 {% endblock %}
 
 {% block body %}
+<input type="hidden" id="hiddenText" value="{{current_user.userCode}}">
 <div class="container">
-<form method="POST" class="form-normalLead" style="color:white">
-    <div class="container rounded-5 center-text custom-container">
-
-        <br><br><br>
-        {{ form.hidden_tag() }}
-            <div class="row">
-                    <div class="col-1 offset-3">
-                        {{ form.yahya.label(class="custom-text") }}
-                        <br>
-                        {{ form.yahya(id="yahya", class="form-check-input checkbox-styling", placeholder="User name", style="background-color: #b1d8fb;") }}
+    <form method="POST" class="form-normalLead" style="color:white" id="mainForm">
+        <div class="container rounded-5 center-text custom-container">
+            <br><br><br>
+            {% if current_user.is_admin %}
+                <div class="row">
+                    <div class="col-2 offset-4 my-auto">
+                        <div class="dropdown ">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Users
+                          </button>
+                          <ul class="dropdown-menu " data-bs-theme="dark" id="users">
+                              {% for user in User.query.all() %}
+                              <li>
+                                  <a class="dropdown-item">
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" value="{{user.id}}" id="user{{loop.index}}">
+                                      <label class="form-check-label" for="user{{loop.index}}">
+                                        {{user.username}}
+                                      </label>
+                                    </div>
+                                  </a>
+                              </li>
+                              {% endfor %}
+                          </ul>
+                        </div>
                     </div>
-                    <div class="col-1 ">
-                        {{ form.rania.label(class="custom-text") }}
-                        <br>
-                        {{ form.rania(id="rania", class="form-check-input checkbox-styling", placeholder="User name", style="background-color: #b1d8fb;") }}
+                    <div class="col-2">
+                        <select class="form-select" data-bs-theme="dark" multiple aria-label="Multiple select example" id="sheets">
+                          <option value="OS">OS</option>
+                          <option value="HS">HS</option>
+                          <option value="Pankaj">Pankaj</option>
+                          <option value="Mohammad">Mohammad</option>
+                          <option value="Dani">Dani</option>
+                        </select>
                     </div>
-                    <div class="col-3 offset-1">
-                        {{form.sheet.label(class="display-6", style="font-weight : 475") }}
-                    </div>
-
-            </div>
-            <div class="row">
-                    <div class="col-1 offset-3">
-                        <br>
-                        {{ form.youssef.label(class="custom-text") }}
-                        <br>
-                        {{ form.youssef(id="youssef", class="form-check-input checkbox-styling", placeholder="User name", style="background-color: #b1d8fb;") }}
-                    </div>
-                    <br>
-                    <div class="col-1 ">
-                        <br>
-                        {{ form.empty.label(class="custom-text") }}
-                        <br>
-                        {{ form.empty(id="empty", class="form-check-input checkbox-styling ", placeholder="User name", style="background-color: #b1d8fb;") }}
-                    </div>
-                    <div class="col-1 offset-1 ">
-                        <br>
-                        {{ form.sheet(id="sheets", class="form-select",size="3", style="width: 300px;background-color: #9bcefa;") }}
-                    </div>
-            </div>
-    </div>
-    <div class="container">
+                </div>
+        </div>
         <br>
-<!--        {{ form.run(class="btn btn-lg btn-block btn-dark form-control", style="background-color: #1D267D", onclick="showMessage()") }}-->
-        <button class="btn btn-lg btn-block btn-dark form-control" style="background-color: #1D267D" onclick="createAlert('Running', 'primary')">Run</button>
+        <button class="btn btn-lg btn-block btn-dark form-control" type="submit" style="background-color: #1D267D" >Run</button>
+            {% else %}
+                <div class="row d-flex justify-content-center">
+                    <div class="col-3">
+                        <select class="form-select" data-bs-theme="dark" multiple aria-label="Multiple select example" id="sheets">
+                          <option value="OS">OS</option>
+                          <option value="HS">HS</option>
+                          <option value="Pankaj">Pankaj</option>
+                          <option value="Mohammad">Mohammad</option>
+                          <option value="Dani">Dani</option>
+                        </select>
+                    </div>
+                </div>
 
-    </div>
-</form>
+        </div>
+        <br>
+        <button class="btn btn-lg btn-block btn-dark form-control" type="submit" style="background-color: #1D267D">Run</button>
+            {% endif %}
 
+    </form>
 </div>
 
-<div class="container center-text">
-    <br>
-</div>
+<script>
+    function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+    // Get the message parameter from the URL
+    var message = getParameterByName('message');
+
+    // Display the message
+    if (message) {
+        var category = "primary";
+        var message = "Running";
+        var existingAlert = document.getElementById("customAlert");
+        if (!existingAlert){
+        // Create alert container
+        var alertContainer = document.createElement("div");
+        alertContainer.className = "cutom-flash alert alert-" + category + " alert-dismissible fade show";
+        alertContainer.setAttribute("role", "alert");
+        alertContainer.id = "customAlert";
+
+        // Create alert message
+        var alertMessage = document.createTextNode(message);
+        alertContainer.appendChild(alertMessage);
+
+        // Create close button
+        var closeButton = document.createElement("button");
+        closeButton.type = "button";
+        closeButton.className = "btn-close";
+        closeButton.setAttribute("data-bs-dismiss", "alert");
+        closeButton.setAttribute("aria-label", "Close");
+        closeButton.onclick = function() {
+            alertContainer.style.display = "none";
+        };
+
+        // Append close button to the alert container
+        alertContainer.appendChild(closeButton);
+
+        // Append the alert container to the body
+        document.body.appendChild(alertContainer);}
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    var dropdown = document.querySelector('.dropdown-menu')
+
+    if(dropdown !== null){
+        dropdown.addEventListener('click', function(event) {
+        event.stopPropagation();
+        });
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    var mainForm = document.getElementById("mainForm");
+    mainForm.onsubmit = function(event){
+            event.preventDefault()
+            var hidden = document.getElementById("hiddenText")
+            var sheets = document.getElementById("sheets");
+            var dropdown = document.getElementById('users');
+            var checkboxes = [];
+            var selectedUsers=[];
+            if(dropdown){
+            checkboxes = dropdown.querySelectorAll('.form-check-input');
+            }
+            else{
+                selectedUsers.push(hidden.value);
+            }
+            var checked = false;
+            for(let i = 0; i<checkboxes.length; i++){
+                if (checkboxes[i].checked){
+                selectedUsers.push(checkboxes[i].value);}
+                checked = checked || checkboxes[i].checked;
+            }
+
+            var extension = "&message=" + encodeURIComponent("Running")
+            if(sheets.value=="" || selectedUsers.length==0){
+            extension="";
+            }
+
+            event.preventDefault();
+            window.location.href = ("/home"+"?&sheet="+sheets.value+"&users="+selectedUsers+extension);
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+</script>
 {% endblock %}

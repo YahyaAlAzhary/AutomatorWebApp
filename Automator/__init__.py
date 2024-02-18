@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
-from google.auth.exceptions import TransportError
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
@@ -16,8 +15,6 @@ login_manager = LoginManager(app)
 
 login_manager.login_view = 'login_page'
 login_manager.login_message = ["Please sign in first", "success"]
-
-
 class SavedEdits:
     edits = {}
 
