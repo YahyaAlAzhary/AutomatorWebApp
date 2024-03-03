@@ -1,4 +1,5 @@
 import datetime
+from pytz import timezone
 import random
 import gspread
 import time
@@ -38,14 +39,13 @@ def generate_random_ip():
 
 
 def generate_random_time():
-    # Get the current datetime
-    current_datetime = datetime.datetime.now()
+    tz = timezone('EST')
+    current_datetime = datetime.datetime.now(tz)
 
     # Create a timedelta representing the shifts
-    hours_shift = datetime.timedelta(hours=7)
     minutes_shift = datetime.timedelta(minutes=(random.randint(10, 30)))
 
-    result = (current_datetime - hours_shift - minutes_shift).strftime("%I:%M:%S %p")
+    result = (current_datetime - minutes_shift).strftime("%I:%M:%S %p")
     hours, minutes, seconds = result.split(':')
     if int(hours) < 8 and seconds.__contains__("AM"):
         hours = 8
@@ -91,6 +91,7 @@ def validElem(x, start):
 
 def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, edits):
     users = [user.strip() for user in users]
+    print(users)
     check_empty = False
     if "" in users:
         check_empty = True
@@ -115,7 +116,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         rownum = 2
         x = None
         print("Running")
-        sheetIf = {"hs": [0, 1, 34, 31],
+        sheetIf = {"hs": [1, 2, 34, 32],
                    "mohammad": [1, 3, 29, 2],
                    "os": [1, 2, 40, 38],
                    "pankaj": [0, 2, 34, 1]}
@@ -147,10 +148,10 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         x = leads[rownum]
 
         sheets = {
-            "dani": ['B', 16, 5, 6, 13, 9, 10, 11, 8, 12, 14, 15, 7, 17, 18, 27, 26, 28, 29, 3, 4,
+            "dani": ['B', 16, 5, 6, 13, 9, 10, 11, 8, 12, 14, 15, 7, 17, 18, 26, 25, 27, 28, 3, 4,
                      20, 21, 22, 23, 24, "intermittent", '1u_Ui9mT-K2QeHGRtJI0W9borqJOaW2Io', "filler"],
-            "hs": ['AI', 18, 6, 7, 14, 10, 11, 12, 9, 13, 15, 16, 8, 19, 17, 27, 26, 28, 29, 1, 5, 21,
-                   22, 25, 23, 24, "intermittent", '1-FxYZ0_tBDSSLxRqMr1iZ3u9YJuJZDtQ', "filler"],
+            "hs": ['AI', 19, 7, 8, 15, 11, 12, 13, 10, 14, 16, 17, 9, 20, 18, 28, 27, 29, 30, 2, 6, 22, 23, 26, 24, 25,
+                   'intermittent', '1-FxYZ0_tBDSSLxRqMr1iZ3u9YJuJZDtQ', 'filler'],
             "mohammad": ['AD', 16, 5, 6, 13, 9, 10, 11, 8, 12, 14, 15, 7, 17, 18, 26, 25,
                          27, 28, 3, 4, 20, 21, 22, 23, 24, "intermittent", '1leDl1DQLnvP2eXc5wZuHP-5ihHeVOVTW',
                          "filler"],
@@ -167,12 +168,12 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         patshoesize = edits.get("patshoesize", x[sh[1]].strip())
 
         # patient's name
-        FirstName = edits.get('patfirstname', x[sh[2]].strip())
-        LastName = edits.get('patlastname', x[sh[3]].strip())
+        FirstName = x[sh[2]].strip()
+        LastName = x[sh[3]].strip()
 
         doubleSpacePattern = re.compile("\s\s+")
         patname = doubleSpacePattern.sub(" ", (f"{FirstName} {LastName}".title()))
-        JointUpdates.set(patname)
+        patname = edits.get("patname", patname)
         print(patname)
 
         # patient's id
@@ -182,14 +183,14 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
             raise MedicareIDException
 
         # patient's city,state,zipcode
-        city = edits.get('city', x[sh[5]].replace(',', '').strip())
+        city = edits.get('patcity', x[sh[5]].replace(',', '').strip())
 
         statePattern = re.compile("[A-Z]{2}")
-        state = edits.get('state', x[sh[6]].upper())
+        state = edits.get('patstate', x[sh[6]].upper())
         state = statePattern.search(state).group()
 
         zipcodePattern = re.compile("[^0-9-]")
-        zipcode = edits.get('zipcode', zipcodePattern.sub(" ", x[sh[7]])).strip()
+        zipcode = edits.get('patzipcode', zipcodePattern.sub(" ", x[sh[7]])).strip()
         zipcodePattern.sub(" ", x[sh[7]])
         patadd2 = city + ', ' + state + ", " + zipcode
 
@@ -371,8 +372,8 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                        "os": x[sh[24]].strip(),
                        "pankaj": x[25].strip()}
 
-        codes = x[sh[19]].replace(" ", "").upper()
-        rstring = x[sh[20]].lower().replace("wirst", "wrist").replace("writs", "wrist")
+        codes = edits.get("lcodes", x[sh[19]].replace(" ", "").upper())
+        rstring = edits.get('requestBraces', x[sh[20]].lower().replace("wirst", "wrist").replace("writs", "wrist"))
         rstring = " " + rstring
         requestedBraces = []
         Lcodes = []
@@ -570,7 +571,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         dradd3 = edits.get('dradd3', row[7].strip())
         dradd4 = edits.get('dradd4', row[8].strip())
         if ((inp == "os" and x[3].lower().strip() != "old one") or (inp == "hs" and x[4].lower().strip() == "remote") or
-                (inp == "dani" and x[31] == "doctor phone")):
+                (inp == "dani" and x[30] == "doctor phone")):
             drphone = row[9].strip()
         else:
             drphone = "800.204.1227"

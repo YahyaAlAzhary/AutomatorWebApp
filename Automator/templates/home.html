@@ -9,7 +9,7 @@ active
 {% endblock %}
 
 {% block body %}
-<input type="hidden" id="hiddenText" value="{{current_user.userCode}}">
+<input type="hidden" id="hiddenText" value="{{current_user.id}}">
 <div class="container">
     <form method="POST" class="form-normalLead" style="color:white" id="mainForm">
         <div class="container rounded-5 center-text custom-container">
@@ -72,51 +72,51 @@ active
 </div>
 
 <script>
-    function getParameterByName(name, url) {
-            if (!url) url = window.location.href;
-            name = name.replace(/[\[\]]/g, '\\$&');
-            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
-        }
+<!--    function getParameterByName(name, url) {-->
+<!--            if (!url) url = window.location.href;-->
+<!--            name = name.replace(/[\[\]]/g, '\\$&');-->
+<!--            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),-->
+<!--                results = regex.exec(url);-->
+<!--            if (!results) return null;-->
+<!--            if (!results[2]) return '';-->
+<!--            return decodeURIComponent(results[2].replace(/\+/g, ' '));-->
+<!--        }-->
 
-    // Get the message parameter from the URL
-    var message = getParameterByName('message');
+<!--    // Get the message parameter from the URL-->
+<!--    var message = getParameterByName('message');-->
 
-    // Display the message
-    if (message) {
-        var category = "primary";
-        var message = "Running";
-        var existingAlert = document.getElementById("customAlert");
-        if (!existingAlert){
-        // Create alert container
-        var alertContainer = document.createElement("div");
-        alertContainer.className = "cutom-flash alert alert-" + category + " alert-dismissible fade show";
-        alertContainer.setAttribute("role", "alert");
-        alertContainer.id = "customAlert";
+<!--    // Display the message-->
+<!--    if (message) {-->
+<!--        var category = "primary";-->
+<!--        var message = "Running";-->
+<!--        var existingAlert = document.getElementById("customAlert");-->
+<!--        if (!existingAlert){-->
+<!--        // Create alert container-->
+<!--        var alertContainer = document.createElement("div");-->
+<!--        alertContainer.className = "cutom-flash alert alert-" + category + " alert-dismissible fade show";-->
+<!--        alertContainer.setAttribute("role", "alert");-->
+<!--        alertContainer.id = "customAlert";-->
 
-        // Create alert message
-        var alertMessage = document.createTextNode(message);
-        alertContainer.appendChild(alertMessage);
+<!--        // Create alert message-->
+<!--        var alertMessage = document.createTextNode(message);-->
+<!--        alertContainer.appendChild(alertMessage);-->
 
-        // Create close button
-        var closeButton = document.createElement("button");
-        closeButton.type = "button";
-        closeButton.className = "btn-close";
-        closeButton.setAttribute("data-bs-dismiss", "alert");
-        closeButton.setAttribute("aria-label", "Close");
-        closeButton.onclick = function() {
-            alertContainer.style.display = "none";
-        };
+<!--        // Create close button-->
+<!--        var closeButton = document.createElement("button");-->
+<!--        closeButton.type = "button";-->
+<!--        closeButton.className = "btn-close";-->
+<!--        closeButton.setAttribute("data-bs-dismiss", "alert");-->
+<!--        closeButton.setAttribute("aria-label", "Close");-->
+<!--        closeButton.onclick = function() {-->
+<!--            alertContainer.style.display = "none";-->
+<!--        };-->
 
-        // Append close button to the alert container
-        alertContainer.appendChild(closeButton);
+<!--        // Append close button to the alert container-->
+<!--        alertContainer.appendChild(closeButton);-->
 
-        // Append the alert container to the body
-        document.body.appendChild(alertContainer);}
-    }
+<!--        // Append the alert container to the body-->
+<!--        document.body.appendChild(alertContainer);}-->
+<!--    }-->
     //------------------------------------------------------------------
     //------------------------------------------------------------------
     var dropdown = document.querySelector('.dropdown-menu')

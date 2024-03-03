@@ -16,6 +16,7 @@ from joint import *
 @app.route("/home", methods=['GET', 'POST'])
 @login_required
 def home_page():
+    SavedEdits.clear()
     sheet = request.args.get("sheet")
     users = request.args.get("users")
     if sheet is not None:
@@ -26,11 +27,16 @@ def home_page():
             flash(["Please select at least one user"], category="danger")
             return redirect(url_for('home_page'))
         else:
+            selectedUsers = []
+            for id in users:
+                selectedUsers.append(User.query.get(id).userCode)
             try:
-                result = mainjoint(sheet, users, "", Authentication.credentials, Authentication.service,
+                result = mainjoint(sheet, selectedUsers, "", Authentication.credentials, Authentication.service,
                           Authentication.drive_service, {})
-            except Exception:
+            except Exception as e:
                 flash(["An un expected error occured"], category="danger")
+                print(e)
+
                 return redirect(url_for('home_page'))
 
             if result[0] == "age":
@@ -100,6 +106,7 @@ def login_page():
 
 
 @app.route("/logout")
+@login_required
 def logout_page():
     logout_user()
     return redirect(url_for("login_page"))
@@ -161,6 +168,7 @@ def request_page():
 
 
 @app.route("/users", methods=['GET', 'POST'])
+@login_required
 def users_page():
     if request.method == "GET" and request.args.get("admin"):
         id = request.args.get("user")

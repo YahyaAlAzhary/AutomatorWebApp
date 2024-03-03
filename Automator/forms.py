@@ -34,9 +34,10 @@ class CustomForm(FlaskForm):
     row = StringField(label='Row Number', validators=[DataRequired()])
 
     fields = SelectField(label="Choose a field to edit (optional)", validators=[Optional()],
-                         choices=[('drname', 'drname'), ('drsigname', 'drsigname'), ('npidr', 'npidr'),
+                         choices=[('drphone', 'drphone'), ('drname', 'drname'), ('drsigname', 'drsigname'),
+                                  ('npidr', 'npidr'),
                                   ('dradd2', 'dradd2'), ('dradd3', 'dradd3'), ('dradd4', 'dradd4'),
-                                  ('patname', 'patname'), ('patmed', 'patmed'), ('patadd1', 'patadd1'),
+                                  ('patname', 'patname'), ('patmed`', 'patmed'), ('patadd1', 'patadd1'),
                                   ('patadd2', 'patadd2'), ('patadd3', 'patadd3'), ('patphone', 'patphone'),
                                   ('patht', 'patht'), ('patwt', 'patwt'), ('patage', 'patage'),
                                   ('patdob', 'patdob'), ('patgender', 'patgender'), ('patsizew', 'patsizew'),
@@ -48,7 +49,9 @@ class CustomForm(FlaskForm):
                                   ('patsurgery', 'patsurgery'), ('patweakness', 'patweakness'),
                                   ('pattwist', 'pattwist'),
                                   ('pattogether', 'pattogether'), ('patoneleg', 'patoneleg'), ('patbend', 'patbend'),
-                                  ('pattime', 'pattime')])
+                                  ('pattime', 'pattime'), ('patcity', 'patcity'), ('patstate', 'patstate'),
+                                  ('patzipcode', 'patzipcode'), ('painfrequency', 'painfrequency'),
+                                  ('patstatus', 'patstatus'), ('lcodes', 'lcodes'), ('requestBraces', 'requestBraces')])
 
     fieldUpdate = StringField(label="Submit Field")
 
