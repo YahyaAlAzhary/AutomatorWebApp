@@ -699,7 +699,6 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
 
             index += 1
         sheet = sheet
-        cell = cell
         sheet.update(cell, [["done"]])
     return ["done"]
 
