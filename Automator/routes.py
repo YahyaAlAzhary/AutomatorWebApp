@@ -1,16 +1,10 @@
-import time
-
 from flask import render_template, redirect, url_for, flash, request, jsonify, session, Response
 from flask_login import login_user, login_required, current_user, logout_user
-from wtforms import BooleanField
-from flask_socketio import emit, send
-from asyncio import sleep, create_task, run
 
 from Automator.forms import NormalForm, CustomForm, LoginForm, RegisterForm
 from Automator import *
 from Automator.models import User
 from joint import *
-from exceptions import *
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -18,6 +12,7 @@ from exceptions import *
 @login_required
 def home_page():
     SavedEdits.clear()
+    SavedInfo.clear()
     sheet = request.args.get("sheet")
     users = request.args.get("users")
     if sheet is not None:
@@ -68,15 +63,32 @@ def custom_page():
             SavedInfo.set(form.sheet.data, [""])
             result = mainjoint(SavedInfo.sheet, SavedInfo.users, int(form.row.data), Authentication.credentials,
                                Authentication.service, Authentication.drive_service, SavedEdits.edits)
-            if result:
-                if result[0] == "age":
-                    flash(["Invalid DOB, try running a custom lead with the corrected patdob"], category="danger")
-                elif result[0] == "shoe":
-                    flash(["Missing shoe size, try running a custom lead with the corrected patdob"], category="danger")
-                else:
-                    flash(["Done"], category="success")
-                    SavedEdits.clear()
-                    SavedInfo.clear()
+            if result[0] == "age":
+                flash([
+                          f"The DOB format is wrong, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"],
+                      category="danger")
+            elif result[0] == "shoe":
+                flash([
+                          f"The Shoe Size is wrong / missing, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"],
+                      category="danger")
+            elif result[0] == "lcode":
+                flash([
+                          f"The LCode for {result[4]} is missing, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"],
+                      category="danger")
+            elif result[0] == "mid":
+                flash([
+                          f"The Medicare ID formate is invalid, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"],
+                      category="danger")
+            elif result[0] == "state":
+                flash([
+                          f"The State is invalid, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"],
+                      category="danger")
+            elif result[0] == "zipcode":
+                flash(["The Zipcode is invalid"])
+            else:
+                flash(["Done"], category="success")
+                SavedEdits.clear()
+                SavedInfo.clear()
 
     if form.is_submitted() and form.submitField.data:
         if not form.fields.data:
