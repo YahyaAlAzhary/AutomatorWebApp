@@ -10,6 +10,7 @@ from Automator.forms import NormalForm, CustomForm, LoginForm, RegisterForm
 from Automator import *
 from Automator.models import User
 from joint import *
+from exceptions import *
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -36,13 +37,20 @@ def home_page():
             except Exception as e:
                 flash(["An un expected error occured"], category="danger")
                 print(e)
-
                 return redirect(url_for('home_page'))
 
             if result[0] == "age":
-                flash([f"The DOB format for {result[1]} in {result[2]} row={result[3]} is wrong. Try fixing it in the custom lead tab"], category="danger")
+                flash([f"The DOB format is wrong, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"], category="danger")
             elif result[0] == "shoe":
-                flash([f"The Shoe Size for {result[1]} in {result[2]} row={result[3]} is wrong / missing. Try fixing it in the custom lead tab"], category="danger")
+                flash([f"The Shoe Size is wrong / missing, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"], category="danger")
+            elif result[0] == "lcode":
+                flash([f"The LCode for {result[4]} is missing, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"], category="danger")
+            elif result[0] == "mid":
+                flash([f"The Medicare ID formate is invalid, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"], category="danger")
+            elif result[0] == "state":
+                flash([f"The State is invalid, {result[1]} in {result[2]} row={result[3]}. Try fixing it in the custom lead tab"], category="danger")
+            elif result[0] == "zipcode":
+                flash(["The Zipcode is invalid"])
             else:
                 flash(["Done"], category="success")
             return redirect(url_for('home_page'))

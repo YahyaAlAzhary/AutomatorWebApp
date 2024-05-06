@@ -11,21 +11,6 @@ from googleapiclient.discovery import build
 from Automator import JointUpdates
 
 
-class AgeException(Exception):
-    def __init__(self, message="Invalid age"):
-        super().__init__(message)
-
-
-class MedicareIDException(Exception):
-    def __init__(self, message="Invalid Medicare ID"):
-        super().__init__(message)
-
-
-class ShoeSizeException(Exception):
-    def __init__(self, message="Shoe size not found"):
-        super().__init__(message)
-
-
 def age(birthdate):
     today = datetime.date.today()
     age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
@@ -179,19 +164,27 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         # patient's id
         MIDpattern = re.compile("^[0-9][A-Z][A-Z0-9][0-9][A-Z][A-Z0-9][0-9][A-Z]{2}[0-9]{2}$")
         patmed = edits.get('patmed', x[sh[4]].strip().upper())
-        if not bool(MIDpattern.match(patmed)):
-            raise MedicareIDException
+        if not bool(MIDpattern.match(patmed)) or len(patmed) != 11:
+            print("Medicare ID is Invalid")
+            return ["mid", patname, sheetName, rownum]
 
         # patient's city,state,zipcode
         city = edits.get('patcity', x[sh[5]].replace(',', '').strip())
 
         statePattern = re.compile("[A-Z]{2}")
         state = edits.get('patstate', x[sh[6]].upper())
-        state = statePattern.search(state).group()
+        try:
+            state = statePattern.search(state).group()
+        except AttributeError:
+            return ["state", patname, sheetName, rownum]
 
         zipcodePattern = re.compile("[^0-9-]")
         zipcode = edits.get('patzipcode', zipcodePattern.sub(" ", x[sh[7]])).strip()
-        zipcodePattern.sub(" ", x[sh[7]])
+        try:
+            int(zipcode)
+        except ValueError:
+            return ["zipcode"]
+
         patadd2 = city + ', ' + state + ", " + zipcode
 
         # patient's street address
@@ -246,6 +239,8 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
 
         elif bool(MonthNumPattern.search(baddob)):
             month = MonthNumPattern.search(baddob).group(1)
+            if int(month) > 12:
+                return ["age", patname, sheetName, rownum]
             month = calendar.month_name[int(month)]
             day = MonthNumPattern.search(baddob).group(2)
             year = MonthNumPattern.search(baddob).group(3)
@@ -450,7 +445,11 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         for pattern in patterns_dict:
             if bool(pattern.search(rstring)):
                 array = patterns_dict[pattern]
-                code = array[0].search(codes).group()
+                try:
+                    code = array[0].search(codes).group()
+                except AttributeError as e:
+                    print("LCode is missing")
+                    return ["lcode", patname, sheetName, rownum, array[2]]
                 Lcodes.append(code)
                 if array[1] == "both":
                     Lcodes.append(code)
