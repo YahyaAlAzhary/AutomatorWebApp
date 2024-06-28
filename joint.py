@@ -660,7 +660,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                                  code, code, code, code, PainFrequency, patinjury,
                                  patsurgery, patbend, patweakness, pattwist,
                                  pattogether,
-                                 patoneleg, pattime, drphone, ppoPrimary, ppoNum, ppoNumF, ppoIns]
+                                 patoneleg, pattime, drphone, ppoPrimary, ppoNumF, ppoNum, ppoIns]
 
             words_to_replace = ['drname', 'drsigname', 'npidr', 'dradd2', 'dradd3', 'dradd4', 'patname', 'patmed',
                                 'patadd1', 'patadd2', 'patadd3', 'patphone', 'patht', 'patwt', 'patage', 'patdob',
@@ -669,7 +669,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                                 "L1971",
                                 "L3960", 'intermittent', 'patinjury', 'patsurgery', 'patbend', 'patweakness',
                                 'pattwist',
-                                'pattogether', 'patoneleg', 'pattime', '800.204.1227', 'ppoPrimary', 'ppoNum', 'ppoNumF'
+                                'pattogether', 'patoneleg', 'pattime', '800.204.1227', 'ppoPrimary', 'ppoNumF', 'ppoNum'
                                 , 'ppoIns']
 
             # Replace words in the document content
