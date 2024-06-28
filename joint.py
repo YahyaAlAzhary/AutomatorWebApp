@@ -88,6 +88,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                    "hs": "my hs",
                    "mohammad": "My Muhammad Muzammil",
                    "os": "my outsourcing",
+                   "ppo os": "my ppo outsourcing",
                    "pankaj": "My Pankaj"}
 
     sh = sheetsNames.get(inp)
@@ -104,6 +105,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         sheetIf = {"hs": [1, 2, 34, 32],
                    "mohammad": [1, 3, 29, 2],
                    "os": [1, 2, 40, 38],
+                   "ppo os": [1, 2, 43, 40],
                    "pankaj": [0, 2, 34, 1]}
         for row in values[1:]:
 
@@ -142,12 +144,26 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                          "filler"],
             "os": ['AO', 18, 7, 8, 15, 11, 12, 13, 10, 14, 16, 17, 9, 19, 20, 28, 27, 29, 30,
                    2, 6, 22, 23, 24, 25, 26, x[32].strip(), '1GaywPLW27xmRlRxtEcmZKfgqZenCSzLL', x[31]],
+            "ppo os": ['AR', 21, 7, 8, 17, 11, 12, 13, 10, 14, 19, 20, 9, 22, 23, 30, 29, 31, 32,
+                   2, 6, 24, 25, 26, 27, 28, x[34].strip(), '1GaywPLW27xmRlRxtEcmZKfgqZenCSzLL', x[33]],
             "pankaj": ['AI', 20, 4, 5, 12, 8, 9, 10, 7, 11, 18, 19, 6, 21, 22, 31, 30, 32, 33, 2,
                        3, 24, 25, 26, 27, 28, "intermittent", '1vhvGahmDDKFa8aH_Z61Z_aLRAHbs-J6f', "filler"]}
 
         sh = sheets.get(inp)
 
         cell = sh[0] + str(rownum)
+
+        # PPO OS extra fields
+        ppoPrimary = ""
+        ppoIns = ""
+        ppoNumF = ""
+        ppoNum = ""
+
+        if inp == "ppo os":
+            ppoPrimary = "Primary Insurance"
+            ppoNumF = "Policy#"
+            ppoIns = x[16]
+            ppoNum = x[15]
 
         # patient's shoe size
         patshoesize = edits.get("patshoesize", x[sh[1]].strip())
@@ -365,6 +381,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                        "hs": "0",
                        "mohammad": validElem(x, 19),
                        "os": x[sh[24]].strip(),
+                       "ppo os": x[sh[24]].strip(),
                        "pankaj": x[25].strip()}
 
         codes = edits.get("lcodes", x[sh[19]].replace(" ", "").upper())
@@ -518,7 +535,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
             patinjury = "Positive"
             patsurgery = "Positive"
 
-        if inp == "os":
+        if inp == "os" or inp == "ppo os":
             patweakness = "Negative"
 
             if (x[33].lower().strip() == "negative" or x[33].lower().strip() == "-" or
@@ -569,7 +586,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         dradd2 = edits.get('dradd2', row[6].strip())
         dradd3 = edits.get('dradd3', row[7].strip())
         dradd4 = edits.get('dradd4', row[8].strip())
-        if ((inp == "os" and x[3].lower().strip() != "old one") or (inp == "hs" and x[4].lower().strip() == "remote") or
+        if (((inp == "os" or inp == "ppo os") and x[3].lower().strip() != "old one") or (inp == "hs" and x[4].lower().strip() == "remote") or
                 (inp == "dani" and x[30] == "doctor phone")):
             drphone = row[9].strip()
         else:
@@ -643,7 +660,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                                  code, code, code, code, PainFrequency, patinjury,
                                  patsurgery, patbend, patweakness, pattwist,
                                  pattogether,
-                                 patoneleg, pattime, drphone]
+                                 patoneleg, pattime, drphone, ppoPrimary, ppoNum, ppoNumF, ppoIns]
 
             words_to_replace = ['drname', 'drsigname', 'npidr', 'dradd2', 'dradd3', 'dradd4', 'patname', 'patmed',
                                 'patadd1', 'patadd2', 'patadd3', 'patphone', 'patht', 'patwt', 'patage', 'patdob',
@@ -652,7 +669,8 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                                 "L1971",
                                 "L3960", 'intermittent', 'patinjury', 'patsurgery', 'patbend', 'patweakness',
                                 'pattwist',
-                                'pattogether', 'patoneleg', 'pattime', '800.204.1227']
+                                'pattogether', 'patoneleg', 'pattime', '800.204.1227', 'ppoPrimary', 'ppoNum', 'ppoNumF'
+                                , 'ppoIns']
 
             # Replace words in the document content
             requests = []

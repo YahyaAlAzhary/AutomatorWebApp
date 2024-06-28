@@ -59,7 +59,7 @@ class CustomForm(FlaskForm):
 
     sheet = SelectField(label="Choose a Sheet",
                         choices=[("Dani", "Dani"), ("HS", "HS"), ("Mohammad", "Mohammad"), ("OS", "OS"),
-                                 ("Pankaj", "Pankaj")])
+                                 ("PPO OS", "PPO OS"), ("Pankaj", "Pankaj")])
 
     run = SubmitField(label="Run")
 
