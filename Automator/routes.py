@@ -25,7 +25,8 @@ def home_page():
         else:
             selectedUsers = []
             for id in users:
-                selectedUsers.append(User.query.get(id).userCode)
+                if id != ",":
+                    selectedUsers.append(User.query.get(id).userCode)
             try:
                 result = mainjoint(sheet, selectedUsers, "", Authentication.credentials, Authentication.service,
                           Authentication.drive_service, {})

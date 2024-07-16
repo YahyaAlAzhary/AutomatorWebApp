@@ -160,8 +160,8 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
         ppoNum = ""
 
         if inp == "ppo os":
-            ppoPrimary = "Primary Insurance"
-            ppoNumF = "Policy#"
+            ppoPrimary = "Primary Insurance:"
+            ppoNumF = "Policy#:"
             ppoIns = x[16]
             ppoNum = x[15]
 
@@ -669,7 +669,7 @@ def mainjoint(sheetName, users, inputrow, credentials, service, drive_service, e
                                 "L1971",
                                 "L3960", 'intermittent', 'patinjury', 'patsurgery', 'patbend', 'patweakness',
                                 'pattwist',
-                                'pattogether', 'patoneleg', 'pattime', '800.204.1227', 'ppoPrimary', 'ppoNumF', 'ppoNum'
+                                'pattogether', 'patoneleg', 'pattime', '800.204.1227', 'ppoPrimary:', 'ppoNumF:', 'ppoNum'
                                 , 'ppoIns']
 
             # Replace words in the document content
