@@ -1,3 +1,7 @@
 test.py
 *.xml
 .idea/
+credentials.json
+instance/
+__pycache__/
+Automator/__pycache__/
